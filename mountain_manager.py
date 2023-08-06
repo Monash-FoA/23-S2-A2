@@ -5,17 +5,17 @@ class MountainManager:
     def __init__(self) -> None:
         pass
 
-    def add_mountain(self, mountain: Mountain):
+    def add_mountain(self, mountain: Mountain) -> None:
         raise NotImplementedError()
 
-    def remove_mountain(self, mountain: Mountain):
+    def remove_mountain(self, mountain: Mountain) -> None:
         raise NotImplementedError()
 
-    def edit_mountain(self, old: Mountain, new: Mountain):
+    def edit_mountain(self, old: Mountain, new: Mountain) -> None:
         raise NotImplementedError()
 
-    def mountains_with_difficulty(self, diff: int):
+    def mountains_with_difficulty(self, diff: int) -> list[Mountain]:
         raise NotImplementedError()
 
-    def group_by_difficulty(self):
+    def group_by_difficulty(self) -> list[list[Mountain]]:
         raise NotImplementedError()

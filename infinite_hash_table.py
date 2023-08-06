@@ -50,7 +50,7 @@ class InfiniteHashTable(Generic[K, V]):
         """
         raise NotImplementedError()
 
-    def __len__(self):
+    def __len__(self) -> int:
         raise NotImplementedError()
 
     def __str__(self) -> str:
@@ -61,7 +61,7 @@ class InfiniteHashTable(Generic[K, V]):
         """
         raise NotImplementedError()
 
-    def get_location(self, key):
+    def get_location(self, key) -> list[int]:
         """
         Get the sequence of positions required to access this key.
 

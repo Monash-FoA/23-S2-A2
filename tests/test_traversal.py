@@ -50,7 +50,7 @@ class TestTrailMethods(unittest.TestCase):
                 super().__init__()
                 self.count = 0
                 self.choices = [PersonalityDecision.BOTTOM, PersonalityDecision.STOP]
-            def select_branch(self, top_branch: Trail, bottom_branch: Trail) -> bool:
+            def select_branch(self, top_branch: Trail, bottom_branch: Trail) -> PersonalityDecision:
                 self.count += 1
                 return self.choices[self.count - 1]
 
