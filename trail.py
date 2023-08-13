@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from mountain import Mountain
 
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Union, List
 
 # Avoid circular imports for typing.
 if TYPE_CHECKING:
@@ -78,9 +78,9 @@ class Trail:
         """Follow a path and add mountains according to a personality."""
         raise NotImplementedError()
 
-    def collect_all_mountains(self) -> list[Mountain]:
+    def collect_all_mountains(self) -> List[Mountain]:
         """Returns a list of all mountains on the trail."""
         raise NotImplementedError()
 
-    def difficulty_difference_paths(self, max_difference: int) -> list[list[Mountain]]: # Input to this should not exceed k > 50, at most 5 branches.
+    def difficulty_difference_paths(self, max_difference: int) -> List[List[Mountain]]: # Input to this should not exceed k > 50, at most 5 branches.
         raise NotImplementedError()

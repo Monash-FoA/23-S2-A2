@@ -1,9 +1,9 @@
 from __future__ import annotations
-from typing import TypeVar
+from typing import TypeVar, List
 
 T = TypeVar("T")
 
-def merge(l1: list[T], l2: list[T], key=lambda x:x) -> list[T]:
+def merge(l1: List[T], l2: List[T], key=lambda x:x) -> List[T]:
     """
     Merges two sorted lists into one larger sorted list,
     containing all elements from the smaller lists.
@@ -28,7 +28,7 @@ def merge(l1: list[T], l2: list[T], key=lambda x:x) -> list[T]:
     new_list += l2[cur_right:]
     return new_list
 
-def mergesort(l: list[T]) -> list[T]:
+def mergesort(l: List[T]) -> List[T]:
     """
     Sort a list using the mergesort operation.
     :complexity: Best/Worst Case O(NlogN * comp(T))

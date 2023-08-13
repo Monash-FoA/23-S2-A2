@@ -1,3 +1,5 @@
+from typing import List
+
 from mountain import Mountain
 
 class MountainManager:
@@ -14,8 +16,8 @@ class MountainManager:
     def edit_mountain(self, old: Mountain, new: Mountain) -> None:
         raise NotImplementedError()
 
-    def mountains_with_difficulty(self, diff: int) -> list[Mountain]:
+    def mountains_with_difficulty(self, diff: int) -> List[Mountain]:
         raise NotImplementedError()
 
-    def group_by_difficulty(self) -> list[list[Mountain]]:
+    def group_by_difficulty(self) -> List[List[Mountain]]:
         raise NotImplementedError()

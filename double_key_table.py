@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Generic, TypeVar, Iterator
+from typing import Generic, TypeVar, Iterator, List
 from data_structures.hash_table import LinearProbeTable, FullError
 from data_structures.referential_array import ArrayR
 
@@ -76,7 +76,7 @@ class DoubleKeyTable(Generic[K1, K2, V]):
         """
         raise NotImplementedError()
 
-    def keys(self, key:K1|None=None) -> list[K1]:
+    def keys(self, key:K1|None=None) -> List[K1]:
         """
         key = None: returns all top-level keys in the table.
         key = x: returns all bottom-level keys for top-level key x.
@@ -92,7 +92,7 @@ class DoubleKeyTable(Generic[K1, K2, V]):
         """
         raise NotImplementedError()
 
-    def values(self, key:K1|None=None) -> list[V]:
+    def values(self, key:K1|None=None) -> List[V]:
         """
         key = None: returns all values in the table.
         key = x: returns all values for top-level key x.

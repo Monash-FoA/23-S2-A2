@@ -7,7 +7,7 @@ __author__ = 'Jackson Goerner'
 __since__ = '07/02/2023'
 
 
-from typing import TypeVar, Generic
+from typing import TypeVar, Generic, List
 from data_structures.referential_array import ArrayR
 
 K = TypeVar('K')
@@ -98,7 +98,7 @@ class LinearProbeTable(Generic[K, V]):
         else:
             raise KeyError(key)
 
-    def keys(self) -> list[K]:
+    def keys(self) -> List[K]:
         """
         Returns all keys in the hash table.
 
@@ -110,7 +110,7 @@ class LinearProbeTable(Generic[K, V]):
                 res.append(self.array[x][0])
         return res
 
-    def values(self) -> list[V]:
+    def values(self) -> List[V]:
         """
         Returns all values in the hash table.
 

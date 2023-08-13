@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, List
 
 from data_structures.referential_array import ArrayR
 
@@ -61,7 +61,7 @@ class InfiniteHashTable(Generic[K, V]):
         """
         raise NotImplementedError()
 
-    def get_location(self, key) -> list[int]:
+    def get_location(self, key) -> List[int]:
         """
         Get the sequence of positions required to access this key.
 
@@ -82,7 +82,7 @@ class InfiniteHashTable(Generic[K, V]):
         else:
             return True
 
-    def sort_keys(self, current=None) -> list[str]:
+    def sort_keys(self, current=None) -> List[str]:
         """
         Returns all keys currently in the table in lexicographically sorted order.
         """

@@ -1,9 +1,9 @@
 from __future__ import annotations
-from typing import TypeVar
+from typing import TypeVar, List
 
 T = TypeVar("T")
 
-def binary_search(l: list[T], item: T) -> int:
+def binary_search(l: List[T], item: T) -> int:
     """
     Utilise the binary search algorithm to find the index where a particular element would be stored.
 
@@ -17,7 +17,7 @@ def binary_search(l: list[T], item: T) -> int:
     """
     return _binary_search_aux(l, item, 0, len(l))
 
-def _binary_search_aux(l: list[T], item: T, lo: int, hi: int) -> int:
+def _binary_search_aux(l: List[T], item: T, lo: int, hi: int) -> int:
     """
     Auxilliary method used by binary search.
     lo: smallest index where the return value could be.
