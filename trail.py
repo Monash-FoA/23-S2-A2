@@ -102,5 +102,10 @@ class Trail:
         """Returns a list of all mountains on the trail."""
         raise NotImplementedError()
 
+    def difficulty_maximum_paths(self, max_difficulty: int) -> list[list[Mountain]]: # Input to this should not exceed k > 50, at most 5 branches.
+        # 1008/2085 ONLY!
+        raise NotImplementedError()
+
     def difficulty_difference_paths(self, max_difference: int) -> list[list[Mountain]]: # Input to this should not exceed k > 50, at most 5 branches.
+        # 1054 ONLY!
         raise NotImplementedError()

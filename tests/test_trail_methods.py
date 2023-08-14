@@ -1,8 +1,8 @@
 import unittest
-from ed_utils.decorators import number
+from ed_utils.decorators import number, advanced
 
 from mountain import Mountain
-from trail import Trail, TrailSeries, TrailSplit, TrailStore
+from trail import Trail, TrailSeries, TrailSplit
 
 class TestTrailMethods(unittest.TestCase):
 
@@ -28,7 +28,44 @@ class TestTrailMethods(unittest.TestCase):
         ))
 
     @number("7.1")
-    def test_example(self):
+    def test_collect_all_mountains(self):
+        self.load_example()
+        res = self.trail.collect_all_mountains()
+
+        hash_mountain = lambda m: m.name
+
+        self.assertEqual(len(res), 6)
+        self.assertSetEqual(set(map(hash_mountain, res)), set(map(hash_mountain, [
+            self.top_bot, self.top_top, self.top_mid,
+            self.bot_one, self.bot_two, self.final
+        ])))
+
+    @number("7.2")
+    def test_difficulty_maximum_paths(self):
+        self.load_example()
+
+        res = self.trail.difficulty_maximum_paths(5)
+        make_path_string = lambda mountain_list: ", ".join(map(lambda x: x.name, mountain_list))
+        # This makes the result a list of strings, like so:
+        # [
+        #   "top-bot, top-middle, final",
+        #   "bot-one, final"
+        # ]
+        res = list(map(make_path_string, res))
+        res.sort()
+
+        expected_res = [
+            "bot-one, final",
+            "bot-one, final", # twice because of the empty split.
+            "bot-one, bot-two, final",
+        ]
+        expected_res.sort()
+
+        self.assertListEqual(res, expected_res)
+
+    @number("7.3")
+    @advanced()
+    def test_difficulty_difference_paths(self):
         self.load_example()
 
         res = self.trail.difficulty_difference_paths(3)
@@ -49,13 +86,3 @@ class TestTrailMethods(unittest.TestCase):
         expected_res.sort()
 
         self.assertListEqual(res, expected_res)
-
-        res = self.trail.collect_all_mountains()
-
-        hash_mountain = lambda m: m.name
-
-        self.assertEqual(len(res), 6)
-        self.assertSetEqual(set(map(hash_mountain, res)), set(map(hash_mountain, [
-            self.top_bot, self.top_top, self.top_mid,
-            self.bot_one, self.bot_two, self.final
-        ])))
