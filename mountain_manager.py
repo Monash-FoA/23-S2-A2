@@ -1,3 +1,4 @@
+from __future__ import annotations
 from mountain import Mountain
 
 class MountainManager:

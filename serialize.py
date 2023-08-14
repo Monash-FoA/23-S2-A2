@@ -1,3 +1,4 @@
+from __future__ import annotations
 import dataclasses, json
 
 from trail import Trail, TrailSplit, TrailSeries
