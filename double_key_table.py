@@ -76,7 +76,7 @@ class DoubleKeyTable(Generic[K1, K2, V]):
         """
         raise NotImplementedError()
 
-    def keys(self, key:K1|None=None) -> list[K1]:
+    def keys(self, key:K1|None=None) -> list[K1|K2]:
         """
         key = None: returns all top-level keys in the table.
         key = x: returns all bottom-level keys for top-level key x.
