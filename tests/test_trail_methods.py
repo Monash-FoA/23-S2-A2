@@ -9,7 +9,7 @@ class TestTrailMethods(unittest.TestCase):
     def load_example(self):
         self.top_top = Mountain("top-top", 6, 3)
         self.top_bot = Mountain("top-bot", 3, 5)
-        self.top_mid = Mountain("top-mid", 2, 7)
+        self.top_mid = Mountain("top-mid", 7, 2)
         self.bot_one = Mountain("bot-one", 2, 5)
         self.bot_two = Mountain("bot-two", 0, 0)
         self.final   = Mountain("final", 4, 4)
@@ -79,7 +79,7 @@ class TestTrailMethods(unittest.TestCase):
         res.sort()
 
         expected_res = [
-            "top-bot, top-mid, final",
+            "top-top, top-mid, final",
             "bot-one, final",
             "bot-one, final", # twice because of the empty split.
         ]
