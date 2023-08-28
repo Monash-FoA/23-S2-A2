@@ -80,8 +80,8 @@ class TrailDraw:
             return max(self.MOUNTAIN_HEIGHT, self.required_height(cur_trail.following))
         else:
             return max(
-                self.required_height(cur_trail.path_top) + self.BRANCH_SEPARATION + self.required_height(cur_trail.path_bottom),
-                self.required_height(cur_trail.path_follow)
+                self.required_height(cur_trail.top) + self.BRANCH_SEPARATION + self.required_height(cur_trail.bottom),
+                self.required_height(cur_trail.following)
             )
 
     def required_width(self, cur_trail: TrailBox|None=None) -> int:
@@ -95,10 +95,10 @@ class TrailDraw:
             return self.TOTAL_MOUNTAIN_WIDTH + self.required_width(cur_trail.following)
         else:
             return 2 * self.BRANCH_WIDTH + max(
-                self.required_width(cur_trail.path_top),
-                self.required_width(cur_trail.path_bottom),
+                self.required_width(cur_trail.top),
+                self.required_width(cur_trail.bottom),
                 self.MIN_BRANCH_CONTENT_WIDTH,
-            ) + self.required_width(cur_trail.path_follow)
+            ) + self.required_width(cur_trail.following)
 
     def draw_in_box(self, height, width, minx, miny, cur_trail: TrailBox|None=None) -> None:
         if cur_trail is None:
@@ -136,13 +136,13 @@ class TrailDraw:
             self.draw_in_box(height, p2/total*width, minx+p1_total_dist, miny, cur_trail.following)
         else:
             ref_trail.trail_box = Box(minx, miny, width, height)
-            b1 = self.required_width(cur_trail.path_top)
-            b2 = self.required_width(cur_trail.path_bottom)
-            b3 = self.required_width(cur_trail.path_follow)
+            b1 = self.required_width(cur_trail.top)
+            b2 = self.required_width(cur_trail.bottom)
+            b3 = self.required_width(cur_trail.following)
             total = b3 + max(b1, b2)
             mid = miny + height/2
-            pth = self.required_height(cur_trail.path_top)
-            pbh = self.required_height(cur_trail.path_bottom)
+            pth = self.required_height(cur_trail.top)
+            pbh = self.required_height(cur_trail.bottom)
             total_height = pth + pbh
             top_section = pth / total_height * (height - self.BRANCH_SEPARATION)
             bot_section = pbh / total_height * (height - self.BRANCH_SEPARATION)
@@ -160,10 +160,10 @@ class TrailDraw:
             cur_trail.branch_start_box = Box(minx, mid - self.BRANCH_SEPARATION/2 - top_section/2, self.BRANCH_WIDTH, bot_section/2 + top_section/2 + self.BRANCH_SEPARATION)
             cur_trail.branch_end_box = Box(minx+width-b3_dist-self.BRANCH_WIDTH, mid - self.BRANCH_SEPARATION/2 - top_section/2, self.BRANCH_WIDTH, bot_section/2 + top_section/2 + self.BRANCH_SEPARATION)
             # Draw top & bottom
-            self.draw_in_box(top_section, branch_dist, minx+self.BRANCH_WIDTH, miny+bot_section+self.BRANCH_SEPARATION, cur_trail.path_top)
-            self.draw_in_box(bot_section, branch_dist, minx+self.BRANCH_WIDTH, miny, cur_trail.path_bottom)
+            self.draw_in_box(top_section, branch_dist, minx+self.BRANCH_WIDTH, miny+bot_section+self.BRANCH_SEPARATION, cur_trail.top)
+            self.draw_in_box(bot_section, branch_dist, minx+self.BRANCH_WIDTH, miny, cur_trail.bottom)
             # Draw following
-            self.draw_in_box(height, b3_dist, minx + width - b3_dist, miny, cur_trail.path_follow)
+            self.draw_in_box(height, b3_dist, minx + width - b3_dist, miny, cur_trail.following)
 
     def draw_line(self, sx, sy, ex, ey):
         import arcade
@@ -247,9 +247,9 @@ class TrailDraw:
                 return cur_trail.branch_start_box, set_m(ref_trail, cur_trail.remove_branch), cur_trail
             if mouse_pos in cur_trail.branch_end_box and mode == DrawMode.REMOVE:
                 return cur_trail.branch_end_box, set_m(ref_trail, cur_trail.remove_branch), cur_trail
-            if mouse_pos in cur_trail.path_bottom.trail_box:
-                return self.box_and_action(mouse_pos, mode, cur_trail.path_bottom, (cur_trail, 'path_bottom'))
-            if mouse_pos in cur_trail.path_top.trail_box:
-                return self.box_and_action(mouse_pos, mode, cur_trail.path_top, (cur_trail, 'path_top'))
-            return self.box_and_action(mouse_pos, mode, cur_trail.path_follow, (cur_trail, 'path_follow'))
+            if mouse_pos in cur_trail.bottom.trail_box:
+                return self.box_and_action(mouse_pos, mode, cur_trail.bottom, (cur_trail, 'bottom'))
+            if mouse_pos in cur_trail.top.trail_box:
+                return self.box_and_action(mouse_pos, mode, cur_trail.top, (cur_trail, 'top'))
+            return self.box_and_action(mouse_pos, mode, cur_trail.following, (cur_trail, 'following'))
         return None, None, None

@@ -13,15 +13,15 @@ if TYPE_CHECKING:
 class TrailSplit:
     """
     A split in the trail.
-       ___path_top____
-      /               \
-    -<                 >-path_follow-
-      \__path_bottom__/
+       _____top______
+      /              \
+    -<                >-following-
+      \____bottom____/
     """
 
-    path_top: Trail
-    path_bottom: Trail
-    path_follow: Trail
+    top: Trail
+    bottom: Trail
+    following: Trail
 
     def remove_branch(self) -> TrailStore:
         """Removes the branch, should just leave the remaining following trail."""

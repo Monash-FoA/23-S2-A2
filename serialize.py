@@ -37,8 +37,8 @@ def deserialize(obj):
         )
     else:
         inside = TrailSplit(
-            deserialize(obj["store"]["path_top"]),
-            deserialize(obj["store"]["path_bottom"]),
-            deserialize(obj["store"]["path_follow"])
+            deserialize(obj["store"]["top"]),
+            deserialize(obj["store"]["bottom"]),
+            deserialize(obj["store"]["following"])
         )
     return Trail(inside)
