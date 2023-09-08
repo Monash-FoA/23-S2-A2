@@ -145,6 +145,7 @@ class DoubleKeyTable(Generic[K1, K2, V]):
         """
         raise NotImplementedError()
 
+    @property
     def table_size(self) -> int:
         """
         Return the current size of the table (different from the length)
