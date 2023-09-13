@@ -11,9 +11,13 @@ class TestDoubleHash(unittest.TestCase):
         See spec sheet image for clarification.
         """
         # Disable resizing / rehashing.
-        dt = DoubleKeyTable(sizes=[12], internal_sizes=[5])
-        dt.hash1 = lambda k: ord(k[0]) % 12
-        dt.hash2 = lambda k, sub_table: ord(k[-1]) % 5
+        class TestingDKT(DoubleKeyTable):
+            def hash1(self, k):
+                return ord(k[0]) % 12
+            def hash2(self, k, sub_table):
+                return ord(k[-1]) % 5
+
+        dt = TestingDKT(sizes=[12], internal_sizes=[5])
 
         dt["Tim", "Jen"] = 1
         dt["Amy", "Ben"] = 2
@@ -33,9 +37,13 @@ class TestDoubleHash(unittest.TestCase):
     @number("3.2")
     def test_delete(self):
         # Disable resizing / rehashing.
-        dt = DoubleKeyTable(sizes=[12], internal_sizes=[5])
-        dt.hash1 = lambda k: ord(k[0]) % 12
-        dt.hash2 = lambda k, sub_table: ord(k[-1]) % 5
+        class TestingDKT(DoubleKeyTable):
+            def hash1(self, k):
+                return ord(k[0]) % 12
+            def hash2(self, k, sub_table):
+                return ord(k[-1]) % 5
+
+        dt = TestingDKT(sizes=[12], internal_sizes=[5])
 
         dt["Tim", "Jen"] = 1
         dt["Amy", "Ben"] = 2
@@ -57,9 +65,13 @@ class TestDoubleHash(unittest.TestCase):
 
     @number("3.3")
     def test_resize(self):
-        dt = DoubleKeyTable(sizes=[3, 5], internal_sizes=[3, 5])
-        dt.hash1 = lambda k: ord(k[0]) % dt.table_size
-        dt.hash2 = lambda k, sub_table: ord(k[-1]) % sub_table.table_size
+        class TestingDKT(DoubleKeyTable):
+            def hash1(self, k):
+                return ord(k[0]) % self.table_size
+            def hash2(self, k, sub_table):
+                return ord(k[-1]) % sub_table.table_size
+
+        dt = TestingDKT(sizes=[3, 5], internal_sizes=[3, 5])
 
         dt["Tim", "Bob"] = 1
         # No resizing yet.
