@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from mountain import Mountain
 
 from typing import TYPE_CHECKING, Union
+from data_structures.linked_stack import LinkedStack
 
 # Avoid circular imports for typing.
 if TYPE_CHECKING:
@@ -93,7 +94,7 @@ class TrailSeries:
         """
         # Trail?
         # return self.following
-        return self.following
+        return TrailSeries(None, self.following)
         # raise NotImplementedError()
 
     def add_mountain_before(self, mountain: Mountain) -> TrailStore:
@@ -104,7 +105,7 @@ class TrailSeries:
         # print(TrailSeries(mountain, TrailSeries(self.mountain, self.following)))
 
         # print(TrailSeries(mountain, self))
-        return Trail(mountain, self)
+        return TrailSeries(mountain, Trail(TrailSeries(self.mountain, Trail(self.following))))
 
         # print(self.mountain)
         # print(7)
@@ -119,10 +120,11 @@ class TrailSeries:
         """
         # return TrailStore()
 
-        return (Trail(None), self)
+        # return (Trail(None), self)
         # print(1)
 
         # return TrailSeries(Trail(None), TrailSeries(TrailSeries.mountain, TrailSeries.following))
+        return TrailSplit(Trail(None),Trail(None), Trail(self))
 
         # raise NotImplementedError()
 
@@ -131,7 +133,7 @@ class TrailSeries:
         Adding a mountain after the current mountain, but before the following trail.
         """
         # return TrailSeries(TrailSeries(cls.mountain, mountain), cls.following)
-        return TrailSeries(self.mountain, TrailSeries(mountain, self.following))
+        return TrailSeries(self.mountain, Trail(TrailSeries(mountain,Trail(self.following))))
         # raise NotImplementedError()
 
     def add_empty_branch_after(self) -> TrailStore:
@@ -140,7 +142,10 @@ class TrailSeries:
         Adding an empty branch after the current mountain, but before the following trail.
         """
         # return TrailSeries(TrailSeries(TrailSeries.mountain, Trail(None)), TrailSeries.following)
-        return self.mountain, TrailSeries(Trail(None), self.following)
+        if self.following.store:
+            return TrailSeries(self.mountain, Trail(TrailSplit(Trail(None),Trail(None),Trail(TrailSeries(self.following.store.mountain,Trail(None))))))
+        else:
+            return TrailSeries(self.mountain, Trail(TrailSplit(Trail(None),Trail(None),Trail(None))))
 
 
         # raise NotImplementedError()
@@ -159,7 +164,10 @@ class Trail:
         Returns a *new* trail which would be the result of:
         Adding a mountain before everything currently in the trail.
         """
-        return Trail(mountain, self.store)
+        if self.store:
+            return Trail(TrailSeries(mountain, Trail(TrailSeries(self.store.mountain, Trail(self.store)))))
+        else:
+            return Trail(TrailSeries(mountain, Trail(None)))
         # return Trail()
 
         # raise NotImplementedError()
@@ -169,15 +177,74 @@ class Trail:
         Returns a *new* trail which would be the result of:
         Adding an empty branch before everything currently in the trail.
         """
-        raise NotImplementedError()
+        if self.store:
+            return Trail(TrailSplit(Trail(None),Trail(None), Trail(TrailSeries(self.store.mountain, Trail(None)))))
+        else:
+            return Trail(TrailSplit(Trail(None), Trail(None), Trail(None)))
 
     def follow_path(self, personality: WalkerPersonality) -> None:
-        """Follow a path and add mountains according to a personality."""
-        raise NotImplementedError()
+        """Follow a path and add mountains according to a personality.
+
+        
+        """
+        current_trail = self  # Renamed from present_trail to current_trail
+        has_passed_split = False  # Renamed from past_split to has_passed_split for clearer naming
+        trail_stack = LinkedStack()  # Renamed from follow_stack to trail_stack
+        
+        while True:  # Using True instead of 1 for clarity and Pythonic style
+            if type(current_trail.store) == TrailSplit:
+                trail_stack.push(current_trail.store.following)
+                walker_choice = personality.select_branch(current_trail.store.top, current_trail.store.bottom)  # Renamed from person_choice to walker_choice
+                if walker_choice.value == 1:
+                    current_trail = current_trail.store.top
+                elif walker_choice.value == 2:
+                    current_trail = current_trail.store.bottom
+                else:
+                    break
+            elif type(current_trail.store) == TrailSeries:
+                personality.add_mountain(current_trail.store.mountain)
+                if current_trail.store.following.store:
+                    current_trail = current_trail.store.following
+                elif not trail_stack.is_empty():
+                    current_trail = trail_stack.pop()
+                else:
+                    break
+            else:
+                if not trail_stack.is_empty():
+                    current_trail = trail_stack.pop()
+                else:
+                    break
+
+
 
     def collect_all_mountains(self) -> list[Mountain]:
         """Returns a list of all mountains on the trail."""
-        raise NotImplementedError()
+        all_mountains = []
+        stack_to_explore = [self]
+
+        while stack_to_explore:
+            current_trail = stack_to_explore.pop()
+
+            # If the current trail points to None (end of a path), continue to next iteration.
+            if current_trail.store is None:
+                continue
+
+            # If TrailSplit, add both possibilities (top and bottom) to be explored next.
+            elif isinstance(current_trail.store, TrailSplit):
+                stack_to_explore.append(current_trail.store.top)
+                stack_to_explore.append(current_trail.store.bottom)
+            
+            # If TrailSeries, add the mountain to our list and add following trail to be explored next.
+            elif isinstance(current_trail.store, TrailSeries):
+                all_mountains.append(current_trail.store.mountain)
+                stack_to_explore.append(current_trail.store.following)
+
+            # Any other unforeseen object type (safety measure to avoid infinite loop).
+            else:
+                raise TypeError("Unsupported type in the trail.")
+
+        return all_mountains
+
 
     def difficulty_maximum_paths(self, max_difficulty: int) -> list[list[Mountain]]: # Input to this should not exceed k > 50, at most 5 branches.
         # 1008/2085 ONLY!
@@ -186,7 +253,6 @@ class Trail:
     def difficulty_difference_paths(self, max_difference: int) -> list[list[Mountain]]: # Input to this should not exceed k > 50, at most 5 branches.
         # 1054 ONLY!
         raise NotImplementedError()
-
 
 
 if __name__=="__main__":
