@@ -28,7 +28,7 @@ class DoubleKeyTable(Generic[K1, K2, V]):
     HASH_BASE = 31
 
     def __init__(self, sizes:list|None=None, internal_sizes:list|None=None) -> None:
-        raise NotImplementedError()
+        self.table = LinearProbeTable[K1, LinearProbeTable[K2, V]](sizes)
 
     def hash1(self, key: K1) -> int:
         """
@@ -118,14 +118,22 @@ class DoubleKeyTable(Generic[K1, K2, V]):
 
         :raises KeyError: when the key doesn't exist.
         """
-        raise NotImplementedError()
+        key1, key2 = key
+        sub_table = self.table[key1]
+        return sub_table[key2]
 
     def __setitem__(self, key: tuple[K1, K2], data: V) -> None:
         """
         Set an (key, value) pair in our hash table.
         """
 
-        raise NotImplementedError()
+        key1, key2 = key
+        try:
+            sub_table = self.table[key1]
+        except KeyError:
+            sub_table = LinearProbeTable[K2, V]()
+            self.table[key1] = sub_table
+        sub_table[key2] = data
 
     def __delitem__(self, key: tuple[K1, K2]) -> None:
         """
@@ -133,7 +141,12 @@ class DoubleKeyTable(Generic[K1, K2, V]):
 
         :raises KeyError: when the key doesn't exist.
         """
-        raise NotImplementedError()
+        key1, key2 = key
+        sub_table = self.table[key1]
+        del sub_table[key2]
+        # If sub_table is empty, remove it from the main table
+        if len(sub_table) == 0:
+            del self.table[key1]
 
     def _rehash(self) -> None:
         """
